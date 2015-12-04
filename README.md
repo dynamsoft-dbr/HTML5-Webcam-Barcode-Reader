@@ -25,7 +25,6 @@ Get Started
 Mobile Screenshots
 --------------------
 ![select camera](http://www.codepool.biz/wp-content/uploads/2015/12/mobile_camera-576x1024.png)
-![mobile barcode reader](http://www.codepool.biz/wp-content/uploads/2015/12/mobile_barcode_result.png)
 
 Desktop Screenshots
 --------------------
