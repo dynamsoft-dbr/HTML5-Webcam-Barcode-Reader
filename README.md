@@ -22,6 +22,14 @@ Get Started
 8. Select a Webcam source. On mobile devices, you can toggle between front-facing camera and back-facing camera.
 9. Click button to detect barcode.
 
+Mobile Screenshots
+--------------------
+![select camera](http://www.codepool.biz/wp-content/uploads/2015/12/mobile_camera-576x1024.png)
+![mobile barcode reader](http://www.codepool.biz/wp-content/uploads/2015/12/mobile_barcode_result.png)
+
+Desktop Screenshots
+--------------------
+![html5 webcam](http://www.codepool.biz/wp-content/uploads/2015/12/desktop_barcode_result-1024x684.png)
 
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API
