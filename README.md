@@ -30,7 +30,12 @@ Desktop Screenshots
 --------------------
 ![html5 webcam](http://www.codepool.biz/wp-content/uploads/2015/12/desktop_barcode_result-1024x684.png)
 
+Blog
+-------
+[How to Make HTML5 Barcode Reader with Desktop and Mobile Cameras][5]
+
 [1]:http://www.dynamsoft.com/Products/Dynamic-Barcode-Reader.aspx
 [2]:https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API
 [3]:http://www.dynamsoft.com/Downloads/Dynamic-Barcode-Reader-Download.aspx
 [4]:http://www.eclipse.org/jetty/
+[5]:http://www.codepool.biz/html5-barcode-reader-desktop-mobile-camera.html
