@@ -80,31 +80,7 @@ public class BarcodeSocket {
     
     @OnWebSocketMessage
     public void onMessage(String message) {
-        if (message.contains("data:image/png;base64")) {
-        	String base64Image = message.split(",")[1];
-            byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-            BufferedImage bi;
-    		try {
-    			bi = ImageIO.read(new ByteArrayInputStream(imageBytes));
-    			File file = new File(mFile);
-    			ImageIO.write(bi, "PNG", file);
-    			
-    			String r = readBarcode(mFile);
-    			
-    			if (r.equals("")) {
-    				mSession.getRemote().sendString("No barcode detected. " + new Date());
-    			}
-    			else {
-    				mSession.getRemote().sendString(r);
-    				System.out.println(r);
-    			}
-    			
-    			
-    		} catch (IOException e1) {
-    			// TODO Auto-generated catch block
-    			e1.printStackTrace();
-    		}
-        }
+    	System.out.println("Received message: "+message);
     }
 
     private String readBarcode(String fileName) {
