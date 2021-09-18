@@ -161,6 +161,6 @@ function scanBarcode() {
     newblob = dataURItoBlob(data);
     ws.send(newblob);
 
-  }, 200);
+  }, 1000);
   console.log("create id: " + intervalId);
 }
