@@ -3,10 +3,8 @@
  *  Support PC & Mobile.
  */
 var videoElement = document.querySelector('video');
-var canvas = document.getElementById('pcCanvas');
-var mobileCanvas = document.getElementById('mobileCanvas');
+var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var mobileCtx = mobileCanvas.getContext('2d');
 var videoSelect = document.querySelector('select#videoSource');
 var videoOption = document.getElementById('videoOption');
 var buttonGo = document.getElementById('go');
@@ -15,35 +13,6 @@ var isConnected = false;
 var isPaused = false;
 var intervalId = 0;
 var videoWidth = 640, videoHeight = 480;
-var mobileVideoWidth = 240, mobileVideoHeight = 320;
-var isPC = true;
-
-// check devices
-function browserRedirect() {
-   var deviceType;
-   var sUserAgent = navigator.userAgent.toLowerCase();
-   var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
-   var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
-   var bIsMidp = sUserAgent.match(/midp/i) == "midp";
-   var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
-   var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
-   var bIsAndroid = sUserAgent.match(/android/i) == "android";
-   var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
-   var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-   if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
-    deviceType = 'phone';
-   } else {
-    deviceType = 'pc';
-   }
-   return deviceType;
-}
-
-if (browserRedirect() == 'pc') {
-  isPC = true;
-}
-else {
-  isPC = false;
-}
 
 // create websocket
 var ws = new WebSocket("wss://"+location.host);
@@ -66,12 +35,7 @@ ws.onmessage = function (evt) {
     window.clearInterval(intervalId);
     console.log("Get result, clean id: " + intervalId);
     buttonGo.disabled = false;
-    if (isPC) {
-      canvas.style.display  = 'block';
-    }
-    else {
-      mobileCanvas.style.display  = 'block';
-    }
+    canvas.style.display  = 'block';
   }
 };
 
@@ -162,12 +126,8 @@ function toggleCamera() {
 buttonGo.onclick = function() {
   window.clearInterval(intervalId);
   console.log("clean id: " + intervalId);
-  if (isPC) {
-    canvas.style.display = 'none';
-  }
-  else {
-    mobileCanvas.style.display = 'none';
-  }
+
+  canvas.style.display = 'none';
 
   isPaused = false;
   scanBarcode();
@@ -202,22 +162,12 @@ function scanBarcode() {
 
     var data = null, newblob = null;
 
-    if (isPC) {
-      ws.send("is pc");
-      ctx.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
-      // convert canvas to base64
-      data = canvas.toDataURL('image/png', 1.0);
-      // convert base64 to binary
-      newblob = dataURItoBlob(data);
-      ws.send(newblob);
-    }
-    else {
-      ws.send("is phone");
-      mobileCtx.drawImage(videoElement, 0, 0, mobileVideoWidth, mobileVideoHeight);
-      // convert canvas to base64
-      data = mobileCanvas.toDataURL('image/png', 1.0);
-      ws.send(data);
-    }
+    ctx.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+    // convert canvas to base64
+    data = canvas.toDataURL('image/png', 1.0);
+    // convert base64 to binary
+    newblob = dataURItoBlob(data);
+    ws.send(newblob);
 
   }, 200);
   console.log("create id: " + intervalId);
