@@ -3,24 +3,17 @@ The sample demonstrates how to implement a HTML5 Webcam Barcode Reader for both 
 
 Prerequisites
 -------------
-* [Dynamsoft Barcode SDK 4.0][3]
+* [Dynamsoft Barcode Reader SDK][3]
 * [Jetty][4]
 
 Get Started
 -----------
-1. Deploy the client to a Web server: Apache, IIS, Nginx or others. E.g. **http://192.168.8.84:8000**.
-2. Import the websocket-server project to eclipse.
-3. Copy **DynamsoftBarcodeJNIx64.dll** and **DynamsoftBarcodeReaderx64.dll** from **%Dynamsoft Barcode Reader%\Samples\Java\BarcodeReaderDemo\src** to the project root directory.
-4. Import Jetty WebSocket libraries.
-5. Build and run the WebSocket server.
-6. Open **video.js** and change the WebSocket IP address and port. E.g.
-
-    ```JavaScript
-    var ws = new WebSocket("ws://192.168.8.84:88");
-    ```
-7. Visit **http://192.168.8.84:8000** in Chrome.
-8. Select a Webcam source. On mobile devices, you can toggle between front-facing camera and back-facing camera.
-9. Click button to detect barcode.
+1. Import the websocket-server project to eclipse.
+2. Download the [java library](https://www.dynamsoft.com/barcode-reader/downloads/) of Dynamsoft Barcode Reader and add it to the build path.
+3. Build and run the WebSocket server.
+4. Visit <https://127.0.0.1:8443>.
+5. Select a Webcam source. On mobile devices, you can toggle between front-facing camera and back-facing camera.
+6. Click button to detect barcode.
 
 Mobile Screenshots
 --------------------
