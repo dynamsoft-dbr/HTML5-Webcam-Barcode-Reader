@@ -15,20 +15,26 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
-import com.dynamsoft.barcode.EnumBarCode;
-import com.dynamsoft.barcode.JBarcode;
-import com.dynamsoft.barcode.tagBarcodeResult;
-import com.dynamsoft.barcode.tagBarcodeResultArray;
+import com.dynamsoft.dbr.BarcodeReader;
+import com.dynamsoft.dbr.BarcodeReaderException;
+import com.dynamsoft.dbr.TextResult;
 
 @WebSocket
 public class BarcodeSocket {
 
 	private Session mSession;
 	private String mFile;
+	private BarcodeReader dbr;
 	
 	public BarcodeSocket() {
 		// TODO Auto-generated constructor stub
 		mFile = this + ".png";
+		try {
+			dbr = new BarcodeReader();
+		} catch (BarcodeReaderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
     @OnWebSocketClose
@@ -84,29 +90,18 @@ public class BarcodeSocket {
     }
 
     private String readBarcode(String fileName) {
-    	// Set DBR license
-		JBarcode.DBR_InitLicense("38B9B94D8B0E2B41DB1CC80A58946567");
-		// Result array
-		tagBarcodeResultArray paryResults = new tagBarcodeResultArray();
-		// Read barcode
-		int iret = JBarcode.DBR_DecodeFile(fileName, 100,
-				EnumBarCode.OneD | EnumBarCode.QR_CODE
-				| EnumBarCode.PDF417 | EnumBarCode.DATAMATRIX, paryResults);
-		
-		System.out.println("DBR_DecodeFile return value: " + iret);
-		String r = "";
-		for (int iIndex = 0; iIndex < paryResults.iBarcodeCount; iIndex++) {
-			tagBarcodeResult result = paryResults.ppBarcodes[iIndex];
-			int barcodeDataLen = result.iBarcodeDataLength;
-
-			byte[] pszTemp1 = new byte[barcodeDataLen];
-			for (int x = 0; x < barcodeDataLen; x++) {
-				pszTemp1[x] = result.pBarcodeData[x];
-			}
-
-			r += "Value: " + new String(pszTemp1);
+    	StringBuilder sb = new StringBuilder();
+		TextResult[] results = null;
+		try {
+			results = dbr.decodeFile(fileName, "");
+		} catch (BarcodeReaderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		return r;
+		for (TextResult result : results) {
+			sb.append("Value: ");
+			sb.append(result.barcodeText);
+		}
+		return sb.toString();
     }
 }
