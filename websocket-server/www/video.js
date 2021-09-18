@@ -162,7 +162,9 @@ function scanBarcode() {
 
     var data = null, newblob = null;
 
-    ctx.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+    ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
     // convert canvas to base64
     data = canvas.toDataURL('image/png', 1.0);
     // convert base64 to binary
