@@ -46,7 +46,7 @@ else {
 }
 
 // create websocket
-var ws = new WebSocket("ws://192.168.8.84:88");
+var ws = new WebSocket("wss://"+location.host);
 
 ws.onopen = function() {
   isConnected = true;
@@ -123,7 +123,12 @@ function dataURItoBlob(dataURI) {
 
 function successCallback(stream) {
   window.stream = stream;
-  videoElement.src = window.URL.createObjectURL(stream);
+  try {
+    videoElement.srcObject = stream;
+  } 
+  catch (error) {
+    videoElement.src = window.URL.createObjectURL(stream);
+  }
   videoElement.play();
 }
 
