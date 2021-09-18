@@ -48,20 +48,18 @@ ws.onerror = function(err) {
     console.log("Error: " + err);
 };
 
-// initialize camera infos for Chrome
-function initCameraSource(sourceInfos) {
-  for (var i = 0; i < sourceInfos.length; i++) {
-    var sourceInfo = sourceInfos[i];
-    var option = document.createElement('option');
-    option.value = sourceInfo.id;
-    if (sourceInfo.kind === 'video') {
-      option.text = sourceInfo.label || "Camera " + (videoSelect.length + 1);
-      videoSelect.appendChild(option);
-    } else {
-      console.log("Source info: " + sourceInfo);
+async function loadCameraSourceList(){
+  var videoSelect = document.getElementById("videoSource");
+  var devices = await navigator.mediaDevices.enumerateDevices();
+  for (var i=0;i<devices.length;i++){
+    var device = devices[i];
+    if (device.kind=="videoinput"){
+      var option = new Option(device.label,device.deviceId);
+      videoSelect.add(option);
     }
   }
-  toggleCamera();
+  videoSelect.onchange = startCamera;
+  startCamera();
 }
 
 // stackoverflow: http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata/5100158
@@ -100,27 +98,38 @@ function errorCallback(error) {
   console.log("Error: " + error);
 }
 
-function startCamera(constraints) {
+function startCamera() {
+  navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia;
+  var selectedSource = document.getElementById("videoSource").selectedOptions[0].value;
+  if (!!selectedSource){
+    var constraints = {
+      video: {
+        height:480,
+        width: 640,
+        deviceId: selectedSource
+      }
+    };
+  }else{
+    var constraints = {
+      video: {
+        height:480,
+        width: 640
+      }
+    };
+  }
+  
   if (navigator.getUserMedia) {
      navigator.getUserMedia(constraints, successCallback, errorCallback);
   }
   else {
+     alert("Unsupported");
      console.log("getUserMedia not supported");
   }
 }
 
-function toggleCamera() {
-  var videoSource = videoSelect.value;
-  var constraints = {
-    video: {
-      optional: [{
-        sourceId: videoSource
-      }]
-    }
-  };
-
-  startCamera(constraints);
-}
+loadCameraSourceList();
 
 // add button event
 buttonGo.onclick = function() {
@@ -133,25 +142,6 @@ buttonGo.onclick = function() {
   scanBarcode();
   buttonGo.disabled = true;
 };
-
-// query supported Web browsers
-if (navigator.getUserMedia || navigator.mozGetUserMedia) {
-  navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia;
-  startCamera({
-    video: {
-      // mandatory: {
-      //   maxWidth: 640,
-      //   maxHeight: 480
-      // }
-    }
-  });
-}
-else if (navigator.webkitGetUserMedia) {
-  videoOption.style.display  = 'block';
-  navigator.getUserMedia = navigator.webkitGetUserMedia;
-  MediaStreamTrack.getSources(initCameraSource);
-  videoSelect.onchange = toggleCamera;
-}
 
 // scan barcode
 function scanBarcode() {
